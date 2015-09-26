@@ -97,7 +97,7 @@ ggplot() + geom_line(data=yaleST,aes(x=Year,y=sim,color="US Short-Term Interest 
         theme_hc()
 ```
 
-`options(scipen=999)` makes sure the ticks on y-axis are not shown in scientific notation. The output looks like below. [![nomial_long-term_return]({{ site.baseurl }}assets/images/nomial_long-term_return_2015-09-20.png)]({{ site.baseurl }}assets/images/nomial_long-term_return_2015-09-20.png) 
+`options(scipen=999)` makes sure the ticks on y-axis are not shown in scientific notation. The output looks like below. [![nomial_long-term_return]({{ site.url }}assets/images/nomial_long-term_return_2015-09-20.png)]({{ site.baseurl }}assets/images/nomial_long-term_return_2015-09-20.png) 
 
 ### Conclusion
 
