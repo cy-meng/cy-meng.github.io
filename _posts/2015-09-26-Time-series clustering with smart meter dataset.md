@@ -84,7 +84,7 @@ ggplot(range.long,aes(x=day,y=value,color=variable))+
 
 The result I'm trying to achieve is to plot individual household vertical by their id index, and then show their date coverage through horizontal lines. The output looks like below:
 
-[![meter-date-range]({{ site.baseurl }}assets/images/meter_date_range_2015_09_26.png)]({{ site.baseurl }}assets/images/meter_date_range_2015_09_26.png)
+[![meter-date-range]({{ site.url }}assets/images/meter_date_range_2015_09_26.png)]({{ site.url }}assets/images/meter_date_range_2015_09_26.png)
 
 Most of the household had their usage recording ended during February 2014, while they started at different point of times. However No.11 there has a notably different date coverage to others. While this shouldn't affect our analysis much, it is a potentially removable candidate if it's necessary.
 
@@ -103,7 +103,7 @@ ggplot(m.long,aes(x=day_time,y=value))+
 	geom_line()+scale_x_chron(format="%H:%M",n=4)+
 	facet_wrap( ~ variable, ncol=5)
 ```
-[![daily_usage_wrap]({{ site.baseurl }}assets/images/daily_usage_wrap_2015_09_26.png)]({{ site.baseurl }}assets/images/daily_usage_wrap_2015_09_26.png) 
+[![daily_usage_wrap]({{ site.url }}assets/images/daily_usage_wrap_2015_09_26.png)]({{ site.url }}assets/images/daily_usage_wrap_2015_09_26.png) 
 
 ## Clustering
 For the times series clustering part I will apply library `TSclust`, a very nicely written package that both consolidates existing time series clustering libraries and provides its own solutions. The paper backing the library is through this [link](https://www.google.com.au/url?sa=t&rct=j&q=&esrc=s&source=web&cd=3&cad=rja&uact=8&ved=0CCgQFjACahUKEwjUsbyHsJTIAhVBQZQKHeL0Bvg&url=http%3A%2F%2Fwww.jstatsoft.org%2Fv62%2Fi01%2Fpaper&usg=AFQjCNEs7oVdU-faTD0CNhkJbtdg6IifLw&sig2=bEN0R-Nt8_wmCK7WquMaLg&bvm=bv.103388427,d.dGY). It is definitely worth taking a look at the reasonings and walkthroughs in this paper. The library provides access to a wide range of dissimilarity measures to perform clustering. And it really depends on the user to make their own judgment on which measure to use. I am still learning the differences and application of different methods.
@@ -122,7 +122,7 @@ hm.clust <- hclust(dm.clust,"complete")
 plot(hm.clust)
 ```
 
-[![clust_cor_dendr]({{ site.baseurl }}assets/images/clust_cor_dendr_2015_09_26.png)]({{ site.baseurl }}assets/images/clust_cor_dendr_2015_09_26.png)
+[![clust_cor_dendr]({{ site.url }}assets/images/clust_cor_dendr_2015_09_26.png)]({{ site.url }}assets/images/clust_cor_dendr_2015_09_26.png)
 
 Unlike k-means clustering, number of clusters to use for horizontal clustering is not determined mathematically. We can combine the dendrogram with the daily usage pattern shown earlier. Here say we use 5 clusters. After assigning all 31 households into cluster groups we can again graph their usage pattern. To get a better comparative look we can use the `grid.arrange` function in `gridExtra` library.
 
@@ -164,7 +164,7 @@ g5 <- ggplot(subset(hm.long,cluster=="5"),aes(x=day_time,y=value))+
 grid.arrange(g1,g2,g3,g4,g5,nrow=5)
 ```
 
-[![clust_cor_k5_wrap]({{ site.baseurl }}assets/images/clust_cor_k5_wrap_2015_09_26.png)]({{ site.baseurl }}assets/images/clust_cor_k5_wrap_2015_09_26.png)
+[![clust_cor_k5_wrap]({{ site.url }}assets/images/clust_cor_k5_wrap_2015_09_26.png)]({{ site.url }}assets/images/clust_cor_k5_wrap_2015_09_26.png)
 
 Now we have what we were looking for. We can see that in general there are some noticeable dissimilarities between clusters. For instance in cluster 2 subjects tend to have higher usage in the morning than in the evening, while in cluster 4 it is mostly the other way around. To further improve the result it will require much closer examination of the dataset and more refinement on modelling methods and assumptions. Statistical learning in time series is indeed a very interesting area that is also receiving lots of attention in the past decade. And I'm keen to see more real world application with it.
 
