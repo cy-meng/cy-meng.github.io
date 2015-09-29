@@ -2,6 +2,7 @@
 title:  "A visual comparison of long term US financial assets performance"
 date:   2015-09-20 13:35:00
 description: Obtain multiple economics dataset through Quandl api, transform and plot a multi-line graph to compare the total return for US stocks, Bonds, CPI and Gold price, over a period from 1875 to 2015.
+comments: true
 ---
 
 ### Motivations

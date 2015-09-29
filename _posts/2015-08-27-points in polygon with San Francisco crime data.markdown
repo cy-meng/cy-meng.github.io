@@ -2,6 +2,7 @@
 title:  "R | spatial data: points in polygon with San Francisco crime data"
 date:   2015-08-27 10:18:00
 description: Explore R's spatial analysis functions using publically available SF crime dataset.
+comments: true
 ---
 
 The San Francisco crime dataset hosted by [SF OpenData](https://data.sfgov.org/) has provided me a good opportunities to test out some of R's spatial analysis libraries. All the coordinate information has already been included so we don't need to worry about geocoding ourselves. Kaggle has divided the entire databset it into train and test sub-datasets for its knowledge-based **San Francisco Crime Classification** competition. The train set is all what I am going to use here. A good exercise to work on would be to group all the observations into geographical areas using all the available spatial information. The dataset has already group everyone into police department districts. So we need to find something else. Zipcode might be something worth trying. To get the geographical data for our purpose here, we can again go to [Open SF Data](https://data.sfgov.org/Geographic-Locations-and-Boundaries/San-Francisco-ZIP-Codes-Zipped-Shapefile-Format-/9q84-kc2y) and download the shapefile pack. Now unzip the downloaded pack and save all the files into the working directory. I have saved them into a new folder called `sf_zipcode`. We can then load the shapefile into r using `rgdal` library.
