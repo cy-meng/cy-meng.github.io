@@ -18,7 +18,7 @@ disqus: false
 disqus_shortname: 'your-disqus-shortname'
 
 # Details for the RSS feed generator
-url:            'http://cy-meng.github.io/blog/'
+url:            'http://cy-meng.github.io/'
 author:         'Chad Meng'
 authorTwitter:  'YourTwitterUsername'
 
