@@ -15,7 +15,7 @@ baseurl: /
 domain_name: 'http://cy-meng.github.io/'
 google_analytics: 'UA-XXXXXXXX-X'
 disqus: true
-disqus_shortname: 'chad9911'
+disqus_shortname: 'cy-meng'
 
 # Details for the RSS feed generator
 url:            'http://cy-meng.github.io/'
