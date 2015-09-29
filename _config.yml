@@ -11,8 +11,8 @@ kramdown:
   syntax_highlighter: rouge
 
 paginate: 20
-baseurl: /blog/
-domain_name: 'http://cy-meng.github.io/blog/'
+baseurl: /
+domain_name: 'http://cy-meng.github.io/'
 google_analytics: 'UA-XXXXXXXX-X'
 disqus: false
 disqus_shortname: 'your-disqus-shortname'
