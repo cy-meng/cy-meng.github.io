@@ -2,6 +2,7 @@
 title:  "Smart meter data: Time series clustering"
 date:   2015-09-26 19:35:00
 description: Daily electricity usage pattern analysis and clustering with sample smart meter reading from 31 Australian households.
+comments: true
 ---
 
 ## Motivation
