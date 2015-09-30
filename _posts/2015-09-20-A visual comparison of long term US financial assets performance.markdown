@@ -13,7 +13,7 @@ In Jeremy Siegel's classic book _Stocks for the Long Run_, the author constructe
 
 With the original graph, the source data was obtained from multiple sources, some of which are either not publicly available or not easily accessible by non-academics. For our purpose here we will ease the requirement on the scale of data and try to find one source that provides the longest time range of the data we need. A very good tool we can use here is the online open data platform [Quandle](https://www.quandl.com/), where we can access huge range of economics and financial market data, mostly without any charge. And we can obtained them through R's `Quandle` library, while performing some basic time series transformation along the way. The database we will focus on will be the _Yale Department of Economics_ database. Majority of the datasets there are provided by Robert Shiller from his numerous researches. The `S&P Composite (Yale)` dataset consists of stock prices, dividends, long-term bond yields and CPI series, which is also one of the main data source for Dr Siegel's research. The description of this dataset and links for the spreadsheets version can be viewed [here](http://www.econ.yale.edu/~shiller/data.htm). When I did the data extraction, the time range covered is from 1871-01-31 to 2015-08-31. Our short-term interest rate can be obtained from another stand-alone dataset named _U.S. Stock Price Data; Real One-Year Interest Rate_， also under the Yale database. For gold price series we can use the data provided by _World Gold Council_, however through Quandl we need to access and combine two datasets in order to get the time range we need. The R script for getting all the mentioned datasets are shown below.
 
-{% highlight r linenos %}
+{% highlight r %}
 require(Quandl)
 
 # Getting the date through Quandl api
@@ -36,7 +36,6 @@ colnames(gld) <- c("Date","Value")
 gld <- rbind(gld,gld2015)
 gld <- gld[order(gld$Date),]
 gld <- gld[months(gld$Date) == 'December',]
-
 {% endhighlight %}
 
 Note that I have joined two gold price series together. Data from `NMA/HIST_GOLD_PR` gives use everything from 1850 through to 2011, the rest until end of 2014 is provided by `WGC/GOLD_DAILY_USD`. Those two are effectively from the same source as mentioned before. The former one are annual data while later can be as precious as daily. Converting it to annual through `collapse=` argument has been troublesome. So I obtained monthly data and converted it to annually by filtering on month. Also note that across those time series, US short-term bond yields and gold index are annually, while all others are monthly data. This means those two series will appear smoother than the other series in the final graph.
@@ -45,7 +44,7 @@ Note that I have joined two gold price series together. Data from `NMA/HIST_GOLD
 
 Now we have all the indexes ready. Our task here is to have all the return indexes starting at the same date, all at one dollar. To do time we need to define two functions.
 
-``` r
+{% highlight r %}
 return_calc <- function(value,dividend){
         if(missing(dividend)){
                 return(c(0,(diff(value)/value[-length(value)])))
@@ -60,11 +59,11 @@ value_sim <- function(rr){
         }
         return(sim) 
 }
-```
+{% endhighlight %}
 
 The first function calculates the rate of return on every data point. Since we are looking at total return here, it also has an optional second argument for dividend. The assumption here is that all the dividend payments are invested back in the portfolio. The second function uses the output from the first function to calculate the simulated asset value at each data point. Next step is to use those two functions to calculate the simulated value movement for everything asset class we have. We will to subsets for some datasets here to ensure that everyone starts at the same day.
 
-``` r
+{% highlight r %}
 yaleComp.sub <- yaleComp[yaleComp$Year <= "2015-05-31" & yaleComp$Year >= "1875-12-31",]
 yaleComp.sub$Dividend[months(yaleComp.sub$Year) != 'December'] <- 0
 yaleComp.sub$n_s_rr <- return_calc(yaleComp.sub$SP_Composite,yaleComp.sub$Dividend)
@@ -79,11 +78,11 @@ yaleST$sim <- value_sim(yaleST$Value/100)
 gld.sub <- gld[gld$Date <= "2015-05-31" & gld$Date >= "1875-12-31",]
 gld.sub$return_rate <- return_calc(gld.sub$Value)
 gld.sub$sim <- value_sim(gld.sub$return_rate)
-```
+{% endhighlight %}
 
 In Yale's S&P composite stock index dataset, both dividend and long-term interest rate shown are annual rates, although they are appearing every month. Thus I have made a some adjustments here so that they are only taken into account in return rate calculation once every year. We have made all the necessary modifications now. Getting the final multi-line graph using `ggplot2` should be very straight forward.
 
-``` r
+{% highlight r %}
 options(scipen=999)
 
 require(ggplot2)
@@ -96,7 +95,7 @@ ggplot() + geom_line(data=yaleST,aes(x=Year,y=sim,color="US Short-Term Interest 
         geom_line(data=gld.sub,aes(x=Date,y=sim,color="Gold")) +
         scale_y_log10() + labs(colour = "") + ylab("Return Index") +
         theme_hc()
-```
+{% endhighlight %}
 
 `options(scipen=999)` makes sure the ticks on y-axis are not shown in scientific notation. The output looks like below. [![nomial_long-term_return]({{ site.url }}assets/images/nomial_long-term_return_2015-09-20.png)]({{ site.url }}assets/images/nomial_long-term_return_2015-09-20.png) 
 

@@ -17,16 +17,16 @@ The sample data used here is from [data.gov.au](https://data.gov.au/dataset/samp
 
 Note that the txt file is tab delimited, UTF-16 encoded and comes with a header row:
 
-``` r
+{% highlight r %}
 dat <- read.table(file="govhackelectricitytimeofusedataset.txt",
     sep="\t",header=T, fileEncoding = "UTF-16")
 colnames(dat) <- c("customer_key","end_time", 
     "general_supply","off_peak","gross_gener","net_gener")
-```
+{% endhighlight %}
 
 The raw data structure likes below:
 
-```
+{% highlight r %}
 'data.frame':	618189 obs. of  6 variables:
 $ customer_key  : int  8170837 8170837 8170837 8170837 8170837 8170837 8170837 8170837 8170837 8170837 ...
 $ end_time      : Factor w/ 42024 levels "1/01/2012 0:29",..: 34400 34401 34402 34403 34404 34405 34406 34407 34408 34409 ...
@@ -34,11 +34,11 @@ $ general_supply: num  0.137 0.197 0.296 0.24 0.253 0.24 0.238 0.225 0.246 0.199
 $ off_peak      : num  0 0 0 0 0 0 0 0 0 0 ...
 $ gross_gener   : num  0 0 0 0 0 0 0 0 0 0 ...
 $ net_gener     : int  0 0 0 0 0 0 0 0 0 0 ...
-```
+{% endhighlight %}
 
 We can then perform some cleaning and subsetting to get a reduced dataset, from here we will start using `dplyr` and `reshape2` to make life easier:
 
-``` r
+{% highlight r %}
 require(dplyr)
 require(reshape2)
 
@@ -55,14 +55,14 @@ dat$day_time <- sapply(dat$end_time,FUN=function(x){
 m <- dat %>%
         select(customer_key,day,day_time,general_supply) %>%
         dcast(day + day_time ~ customer_key, value.var = "general_supply")
-```
+{% endhighlight %}
 
 So we have divided date column into date and time, and converted the data into a wide format. This will be the starting point of our analysis.
 
 ## Manipulation and Exploration
 One thing we can notice in the dataset is that the time range covered by each household is actually different. It would be good to gain some visibility on this. And by visibility I do mean graphical visibility. Here is what I came up with:
 
-``` r
+{% highlight r %}
 require(ggplot2)
 
 range.long <- m %>%
@@ -81,7 +81,7 @@ ggplot(range.long,aes(x=day,y=value,color=variable))+
 	scale_x_date("Date Range",breaks="3 month") +
 	theme(axis.text.x=element_text(angle=-45,hjust=0.001)) +
 	guides(color=F)
-```
+{% endhighlight %}
 
 The result I'm trying to achieve is to plot individual household vertical by their id index, and then show their date coverage through horizontal lines. The output looks like below:
 
@@ -91,7 +91,7 @@ Most of the household had their usage recording ended during February 2014, whil
 
 Now we can work on getting the daily usage patterns. This can be done simply by aggregating each households daily usage amount by taking the means. This is an obviously simplified approach as we are ignoring things like seasonal changes, weekends and holidays. We also introduce 'chron' package here for its specialty in manipulating times.
 
-``` r
+{% highlight r %}
 require(chron)
 
 m2 <- aggregate(m[, 3:33], list(m$day_time), mean, na.rm=TRUE)
@@ -103,7 +103,7 @@ m.long$day_time <- times(paste(m.long$day_time,':00',sep=""))
 ggplot(m.long,aes(x=day_time,y=value))+
 	geom_line()+scale_x_chron(format="%H:%M",n=4)+
 	facet_wrap( ~ variable, ncol=5)
-```
+{% endhighlight %}
 [![daily_usage_wrap]({{ site.baseurl }}assets/images/daily_usage_wrap_2015_09_26.png)]({{ site.baseurl }}assets/images/daily_usage_wrap_2015_09_26.png) 
 
 ## Clustering
@@ -111,7 +111,7 @@ For the times series clustering part I will apply library `TSclust`, a very nice
 
 The purpose here is to cluster household's daily electricity usage pattern in relative term, which means I will ignore the variation of absolute usage value between households, which could be contributed by factors like size of their house or family, energy efficiency of some home appliances etc. For this reason I will apply the dissimilarity method driven by correlation. Horizontal clustering is used here, script below measures dissimilarity, perform clustering and plot the dendrogram. 
 
-``` r
+{% highlight r %}
 require(TSclust)
 
 m.clust <- m2 %>%
@@ -121,13 +121,13 @@ rownames(m.clust) <- m2$day_time
 dm.clust <- diss(m.clust, "COR")
 hm.clust <- hclust(dm.clust,"complete")
 plot(hm.clust)
-```
+{% endhighlight %}
 
 [![clust_cor_dendr]({{ site.baseurl }}assets/images/clust_cor_dendr_2015_09_26.png)]({{ site.baseurl }}assets/images/clust_cor_dendr_2015_09_26.png)
 
 Unlike k-means clustering, number of clusters to use for horizontal clustering is not determined mathematically. We can combine the dendrogram with the daily usage pattern shown earlier. Here say we use 5 clusters. After assigning all 31 households into cluster groups we can again graph their usage pattern. To get a better comparative look we can use the `grid.arrange` function in `gridExtra` library.
 
-``` r
+{% highlight r %}
 require(gridExtra)
 
 hclust.m <- data.frame(cutree(hm.clust,k=5))
@@ -163,7 +163,7 @@ g5 <- ggplot(subset(hm.long,cluster=="5"),aes(x=day_time,y=value))+
 	facet_grid( ~ variable)
 
 grid.arrange(g1,g2,g3,g4,g5,nrow=5)
-```
+{% endhighlight %}
 
 [![clust_cor_k5_wrap]({{ site.baseurl }}assets/images/clust_cor_k5_wrap_2015_09_26.png)]({{ site.baseurl }}assets/images/clust_cor_k5_wrap_2015_09_26.png)
 
