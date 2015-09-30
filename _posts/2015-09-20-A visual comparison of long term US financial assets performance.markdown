@@ -13,7 +13,7 @@ In Jeremy Siegel's classic book _Stocks for the Long Run_, the author constructe
 
 With the original graph, the source data was obtained from multiple sources, some of which are either not publicly available or not easily accessible by non-academics. For our purpose here we will ease the requirement on the scale of data and try to find one source that provides the longest time range of the data we need. A very good tool we can use here is the online open data platform [Quandle](https://www.quandl.com/), where we can access huge range of economics and financial market data, mostly without any charge. And we can obtained them through R's `Quandle` library, while performing some basic time series transformation along the way. The database we will focus on will be the _Yale Department of Economics_ database. Majority of the datasets there are provided by Robert Shiller from his numerous researches. The `S&P Composite (Yale)` dataset consists of stock prices, dividends, long-term bond yields and CPI series, which is also one of the main data source for Dr Siegel's research. The description of this dataset and links for the spreadsheets version can be viewed [here](http://www.econ.yale.edu/~shiller/data.htm). When I did the data extraction, the time range covered is from 1871-01-31 to 2015-08-31. Our short-term interest rate can be obtained from another stand-alone dataset named _U.S. Stock Price Data; Real One-Year Interest Rate_， also under the Yale database. For gold price series we can use the data provided by _World Gold Council_, however through Quandl we need to access and combine two datasets in order to get the time range we need. The R script for getting all the mentioned datasets are shown below.
 
-``` r
+{% highlight r %}
 require(Quandl)
 
 # Getting the date through Quandl api
@@ -37,7 +37,7 @@ gld <- rbind(gld,gld2015)
 gld <- gld[order(gld$Date),]
 gld <- gld[months(gld$Date) == 'December',]
 
-```
+{% endhighlight %}
 
 Note that I have joined two gold price series together. Data from `NMA/HIST_GOLD_PR` gives use everything from 1850 through to 2011, the rest until end of 2014 is provided by `WGC/GOLD_DAILY_USD`. Those two are effectively from the same source as mentioned before. The former one are annual data while later can be as precious as daily. Converting it to annual through `collapse=` argument has been troublesome. So I obtained monthly data and converted it to annually by filtering on month. Also note that across those time series, US short-term bond yields and gold index are annually, while all others are monthly data. This means those two series will appear smoother than the other series in the final graph.
 

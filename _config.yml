@@ -4,11 +4,12 @@ meta_description: "writing about economics, data analysis, often with R."
 
 aboutPage: true
 
-markdown: kramdown
+#markdown: kramdown
+#kramdown:
+#   input: GFM
+#  syntax_highlighter: rouge
 
-kramdown:
-  input: GFM
-  syntax_highlighter: rouge
+highlighter: pygments
 
 paginate: 20
 baseurl: /
@@ -19,7 +20,7 @@ disqus_shortname: 'cy-meng'
 
 # Details for the RSS feed generator
 url:            'http://cy-meng.github.io/'
-author:         'chad meng'
+author:         'Chad Meng'
 authorTwitter:  'YourTwitterUsername'
 
 permalink:       /:year/:title/
