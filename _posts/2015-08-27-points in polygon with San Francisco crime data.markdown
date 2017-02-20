@@ -104,4 +104,4 @@ m <- leaflet(sf) %>%
   )
 {% endhighlight %}
 
-[![zipcode_density]({{ site.url }}assets/images/zipcode_density.jpg)]({{ site.url }}assets/images/zipcode_density.jpg) Hope this provides a bit of idea on how to match some coordinates to areas on a map using R's spatial analysis tools. You can find a complete version of all the codes and datasets used in this post at my [github](https://github.com/chad9911/SF-crime-exploration) page, including the completed zipcode for kaggle's train dataset so to save your a few hours time running the loop yourself.
+[![zipcode_density]({{ site.url }}assets/images/zipcode_density.png)]({{ site.url }}assets/images/zipcode_density.png) Hope this provides a bit of idea on how to match some coordinates to areas on a map using R's spatial analysis tools. You can find a complete version of all the codes and datasets used in this post at my [github](https://github.com/chad9911/SF-crime-exploration) page, including the completed zipcode for kaggle's train dataset so to save your a few hours time running the loop yourself.
